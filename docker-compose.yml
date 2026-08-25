@@ -1,0 +1,29 @@
+services:
+  db:
+    image: mariadb:10.4
+    environment:
+      MARIADB_ROOT_PASSWORD: ""
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+      MARIADB_DATABASE: transporte_jilotepec
+    volumes:
+      - ./transporte_jilotepec.sql:/docker-entrypoint-initdb.d/01-dump.sql:ro
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  web:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: ""
+      DB_NAME: transporte_jilotepec
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8080:80"
+
+volumes:
+  dbdata:
