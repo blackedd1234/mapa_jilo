@@ -82,7 +82,14 @@
         
         .leaflet-popup-content-wrapper { background: var(--card); color: white; border-radius: 8px; }
         .leaflet-popup-tip { background: var(--card); }
-        .popup-title { font-size: 14px; margin-bottom: 2px; display: block; font-weight: bold; }
+        .popup-title { font-size: 14px; margin-bottom: 2px; display: block; font-weight: bold; color: #ffffff !important; }
+        .popup-header { display: flex; align-items: center; gap: 10px; }
+        .popup-swatch {
+            width: 34px; height: 34px; border-radius: 8px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 10px; color: #fff; text-transform: uppercase;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
 
         /* Animación del Aviso de Privacidad / Deslinde */
         @keyframes destello-alerta {
@@ -357,6 +364,11 @@
                     const diasServicio = p.dias || 'Lun - Dom';
                     const horarioServicio = p.horario || '06:00 - 20:00';
 
+                    // Iniciales del concesionario: se usan tanto en la tarjeta como en el popup
+                    const iniciales = p.empresa.split(' ')
+                        .filter(w => w.length > 2 && !w.includes('.') && w.toLowerCase() !== 'ruta')
+                        .map(word => word.charAt(0)).join('').substring(0, 3);
+
                     let layerGeoJSON = null;
                     let marcadorA = null;
                     let marcadorB = null;
@@ -366,8 +378,13 @@
                             style: { color: color, weight: 7, opacity: 0.95, lineJoin: 'round' }
                         }).bindPopup(`
                             <div style="min-width:180px;">
-                                <b class="popup-title" style="color:${color}">${p.nombre}</b>
-                                <small style="color:#e1e4e8; display:block; margin-top:2px;">${p.empresa}</small>
+                                <div class="popup-header">
+                                    <div class="popup-swatch" style="background:${color};">${iniciales || 'RT'}</div>
+                                    <div style="min-width:0;">
+                                        <b class="popup-title">${p.nombre}</b>
+                                        <small style="color:#e1e4e8; display:block; margin-top:2px;">${p.empresa}</small>
+                                    </div>
+                                </div>
                                 <hr style="border:0; border-top:1px solid #30363d; margin:5px 0;">` +
                                 
                                 /* ===========================================================
@@ -412,10 +429,6 @@
                     card.style.borderLeft = `6px solid ${color}`;
                     card.style.setProperty('--active-color', color);
                     
-                    const iniciales = p.empresa.split(' ')
-                        .filter(w => w.length > 2 && !w.includes('.') && w.toLowerCase() !== 'ruta')
-                        .map(word => word.charAt(0)).join('').substring(0, 3);
-
                     card.innerHTML = `
                         <div class="ruta-icon" style="background:${color}; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
                             ${iniciales || 'RT'}
