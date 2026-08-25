@@ -1,7 +1,7 @@
 <?php
 include 'config.php'; // Tu archivo de conexión
 
-$zipFile = 'C:/xampp/htdocs/jilma/jilotepec.gtfs.zip'; // Asegúrate de que el nombre coincida
+$zipFile = __DIR__ . '/jilotepec.gtfs.zip'; // Asegúrate de que el nombre coincida
 $zip = new ZipArchive;
 
 if ($zip->open($zipFile) === TRUE) {

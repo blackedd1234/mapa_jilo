@@ -9,7 +9,7 @@ ini_set('memory_limit', '512M');
 
 include 'config.php';
 
-$zipFile = 'C:/xampp/htdocs/jilma/jilotepec.gtfs.zip'; 
+$zipFile = __DIR__ . '/jilotepec.gtfs.zip'; 
 $zip = new ZipArchive;
 
 echo "Iniciando proceso...<br>";
